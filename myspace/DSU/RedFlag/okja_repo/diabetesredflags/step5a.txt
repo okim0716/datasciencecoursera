@@ -1,0 +1,27 @@
+###Step 5a
+
+#####Create a hive table
+#####etgSummary for continuously enrolled members only and join with condition_status_code
+
+create table dsu_boston.step5a_etg_summarystatus as 
+select a.*, b.condition_status_code from (select n.* from dsu_boston.step1_etgsummary n 
+where cast(n.nhi_individual_id as Double) in (select cast(m.nhi_individual_id as Double) from dsu_boston.step4_continuous_members_only m)) a 
+left outer join dnhi_ccistateview.pqt_etg_ep_cond_status_2015 b on (a.nhi_individual_id=b.nhi_individual_id and a.episode_number=b.episode_number);
+
+#### 6621688 records 
+#### 507857 distict nhi_individual_id
+
+
+#####Creating part files
+
+insert overwrite local directory '../../mapr/datalake/optum/optuminsight/sandbox2/dsu/redflag/v2/step5a_etg_summarystatus' 
+row format delimited 
+fields terminated by ',' 
+stored as textfile 
+select * from dsu_boston.step5a_etg_summarystatus;
+
+##### end of Step 5a
+
+
+
+
