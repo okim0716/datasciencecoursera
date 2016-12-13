@@ -1,0 +1,23 @@
+###Step 4
+#####Create a hive table
+
+CREATE TABLE IF NOT EXISTS dsu_boston.step4_continuous_members_only (row_no String, nhi_individual_id String, continuous String)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+#####Load data into that table 
+
+LOAD DATA LOCAL INPATH '../../mapr/datalake/optum/optuminsight/sandbox2/dsu/redflag/v2/step4_continuous_members_only.csv'
+OVERWRITE INTO TABLE dsu_boston.step4_continuous_members_only;
+
+##### 507857 distinct nhi_individual_id
+
+##### end of Step 4
+
+
+
+
